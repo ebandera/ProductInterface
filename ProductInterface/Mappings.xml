@@ -1,0 +1,30 @@
+<xml>
+	<ColumnMap name="VMI" description="Downloaded Catalog (with price)" id="vmi1">
+		<ColumnMapItem columnNumber="1" headerValue="MfrCode">MfrCode</ColumnMapItem> 
+		<ColumnMapItem columnNumber="2" headerValue="Catalog#">CatalogNumber</ColumnMapItem> 
+		<ColumnMapItem columnNumber="3" headerValue="Description" overrideMode="true">ProductName</ColumnMapItem> 
+		<ColumnMapItem columnNumber="4" headerValue="CusPartNum" >CusPartNum</ColumnMapItem> 
+		<ColumnMapItem columnNumber="5" headerValue="CusPartDescription" overrideMode="true">CusPartDesc</ColumnMapItem> 
+		<ColumnMapItem columnNumber="6" headerValue="Vendor#">VendorNum</ColumnMapItem> 
+		<ColumnMapItem columnNumber="7" headerValue="Item#">ItemNum</ColumnMapItem> 
+		<ColumnMapItem columnNumber="8" headerValue="Price">Price</ColumnMapItem> 
+		<ColumnMapItem columnNumber="9" headerValue="PriceUom">PriceUom</ColumnMapItem> 
+		<ColumnMapItem columnNumber="11" headerValue="MinQty">Min</ColumnMapItem> 
+		<ColumnMapItem columnNumber="12" headerValue="MaxQty">Max</ColumnMapItem> 
+		<ColumnMapItem columnNumber="15" headerValue="BinLocation">BinLocation</ColumnMapItem> 
+	</ColumnMap>
+  <ColumnMap name="VMI" description="Template (without price)" id="vmi2">
+    <ColumnMapItem columnNumber="1" headerValue="MfrCode">MfrCode</ColumnMapItem>
+    <ColumnMapItem columnNumber="2" headerValue="Catalog#">CatalogNumber</ColumnMapItem>
+    <ColumnMapItem columnNumber="3" headerValue="Description" overrideMode="true">ProductName</ColumnMapItem>
+    <ColumnMapItem columnNumber="4" headerValue="CusPartNum" >CusPartNum</ColumnMapItem>
+    <ColumnMapItem columnNumber="5" headerValue="CusPartDescription" overrideMode="true">CusPartDesc</ColumnMapItem>
+    <ColumnMapItem columnNumber="6" headerValue="Vendor#">VendorNum</ColumnMapItem>
+    <ColumnMapItem columnNumber="7" headerValue="Item#">ItemNum</ColumnMapItem>
+    <ColumnMapItem columnNumber="9" headerValue="MinQty">Min</ColumnMapItem>
+    <ColumnMapItem columnNumber="10" headerValue="MaxQty">Max</ColumnMapItem>
+    <ColumnMapItem columnNumber="13" headerValue="BinLocation">BinLocation</ColumnMapItem>
+  </ColumnMap>
+</xml>	
+		
+	

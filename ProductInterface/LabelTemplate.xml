@@ -1,0 +1,92 @@
+<xml>
+	<LabelPrint>
+		<Paper> 
+            <Parameter name="width">8.5</Parameter> 
+            <Parameter name="height">11</Parameter> 
+            <Parameter name="printwidth">850</Parameter> 
+            <Parameter name="printheight">1100</Parameter> 
+    </Paper> 
+		<LabelTemplate> 
+			<Item type="text" tagname="description" data="{ProductName}"> 
+				<Parameter name="fontfamily">Calibri</Parameter> 
+				<Parameter name="fontsize">11</Parameter> 
+				<Parameter name="fontstyle">bold</Parameter> 
+				<Parameter name="positionx">80</Parameter> 
+				<Parameter name="positiony">0</Parameter> 
+				<Parameter name="width">312</Parameter> 
+				<Parameter name="height">17</Parameter> 
+				<Parameter name="halign">left</Parameter> 
+				<Parameter name="valign">top</Parameter> 
+				<Parameter name="border">false</Parameter> 
+				<Parameter name="fill">false</Parameter> 
+			</Item> 
+			<Item type="text" tagname="minmax" data="{Min}/{Max}"> 
+				<Parameter name="fontfamily">Calibri</Parameter> 
+				<Parameter name="fontsize">10</Parameter> 
+				<Parameter name="fontstyle">normal</Parameter> 
+				<Parameter name="positionx">80</Parameter> 
+				<Parameter name="positiony">34</Parameter> 
+				<Parameter name="width">242</Parameter> 
+				<Parameter name="height">17</Parameter> 
+				<Parameter name="halign">left</Parameter> 
+				<Parameter name="valign">top</Parameter> 
+				<Parameter name="border">false</Parameter> 
+				<Parameter name="fill">false</Parameter> 
+			</Item> 
+			<Item type="text" tagname="binloc" data="Loc:{BinLocation}"> 
+				<Parameter name="fontfamily">Calibri</Parameter> 
+				<Parameter name="fontsize">10</Parameter> 
+				<Parameter name="fontstyle">Normal</Parameter> 
+				<Parameter name="positionx">80</Parameter> 
+				<Parameter name="positiony">51</Parameter> 
+				<Parameter name="width">242</Parameter> 
+				<Parameter name="height">31</Parameter> 
+				<Parameter name="halign">left</Parameter> 
+				<Parameter name="valign">top</Parameter> 
+				<Parameter name="border">false</Parameter> 
+				<Parameter name="fill">false</Parameter> 
+			</Item> 
+			<Item type="text" tagname="partnum" data="{MfrCode} {CatalogNumber}"> 
+				<Parameter name="fontfamily">Calibri</Parameter> 
+				<Parameter name="fontsize">10</Parameter> 
+				<Parameter name="fontstyle">normal</Parameter> 
+				<Parameter name="positionx">80</Parameter> 
+				<Parameter name="positiony">68</Parameter> 
+				<Parameter name="width">242</Parameter> 
+				<Parameter name="height">31</Parameter> 
+				<Parameter name="halign">left</Parameter> 
+				<Parameter name="valign">top</Parameter> 
+				<Parameter name="border">false</Parameter> 
+				<Parameter name="fill">false</Parameter> 
+			</Item> 
+			<Item type="image" tagname="logo" location="data" source="web" data="{ThumbnailUrl}"> 
+				<Parameter name="positionx">340</Parameter> 
+				<Parameter name="positiony">20</Parameter> 
+				<Parameter name="width">45</Parameter> 
+				<Parameter name="height">90</Parameter> 
+				<Parameter name="border">false</Parameter> 
+				<Parameter name="displaymode">contains</Parameter> 
+			</Item> 
+			
+			<Item type="qr" tagname="bcqr" data="{MfrCode} {CatalogNumber}"> 
+				<Parameter name="positionx">10</Parameter> 
+				<Parameter name="positiony">10</Parameter> 
+				<Parameter name="width">63</Parameter> 
+				<Parameter name="height">63</Parameter> 
+				<Parameter name="border">false</Parameter> 
+			</Item> 
+		</LabelTemplate> 
+		<SheetTemplate> 
+			<Parameter name="marginleft">0</Parameter> 
+			<Parameter name="margintop">70</Parameter> 
+			<Parameter name="width">392</Parameter> 
+			<Parameter name="height">133</Parameter> 
+			<Parameter name="xgap">19</Parameter> 
+			<Parameter name="ygap">0</Parameter> 
+			<Parameter name="cols">2</Parameter> 
+			<Parameter name="rows">7</Parameter> 
+			<Parameter name="angle">0</Parameter> 
+			<Parameter name="resizemode">none</Parameter> 
+		</SheetTemplate> 
+	</LabelPrint> 
+</xml>
