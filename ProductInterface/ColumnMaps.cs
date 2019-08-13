@@ -81,10 +81,17 @@ namespace ProductInterface
         }
         public bool ValidateSheet(List<List<string>> grid)
         {
+            try
+            {
+
+            
             bool mapResult=true;
+            //the reason for the loop is in case there are multiple maps in a single input file
             foreach (ColumnMap map in maps)
             {
+                //set map to evaluate as true, and then if every thing doesn't match exactly, it will fail
                 mapResult = true;
+                //this is just to give an exception if the xml says not to validate the header
                 if (map.validateHeader == false) { validMapId = map.id; break; }
                 foreach (ColumnMapItem col in map.Items)
                 {
@@ -93,11 +100,22 @@ namespace ProductInterface
                     {
                         mapResult = false;break;
                     }
+                   
                 }
-                if (mapResult == true) { validMapId = map.id; break; }
+                
+                    if (mapResult == true) { validMapId = map.id; break; }
 
             }
+           // if(this.GetActiveMap().Items.Last().ColumnNumber)//was thinking about validating the last column to make sure there are not more columns that header info, but decided against it
+           //in favor of
+            //make sure that if there are no maps, or if the input file is invalid, it will not succeed 
+            if (maps.Count == 0) { mapResult = false; }
             return mapResult;
+            }
+            catch
+            {
+                return false;
+            }
 
 
         }

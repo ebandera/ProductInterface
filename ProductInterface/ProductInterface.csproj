@@ -82,6 +82,12 @@
     <Compile Include="frmImages.Designer.cs">
       <DependentUpon>frmImages.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmPreloadedTypes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPreloadedTypes.Designer.cs">
+      <DependentUpon>frmPreloadedTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="LegacyExcelReader.cs" />
     <Compile Include="RegReader.cs" />
     <Compile Include="Settings.cs">
@@ -109,6 +115,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmImages.resx">
       <DependentUpon>frmImages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPreloadedTypes.resx">
+      <DependentUpon>frmPreloadedTypes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

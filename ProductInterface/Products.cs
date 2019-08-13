@@ -34,25 +34,52 @@ namespace ProductInterface
             foreach (Product p in this)
             {
                 //if the catlag number matches the mfrcatalog
-                if(pdsOut.Exists(x => (x.MfrCode == p.MfrCode) && (x.MfrCatalog==p.CatalogNumber)))
+                if(pdsOut.Exists(x => (x.CEDMfrCode == p.MfrCode) && (x.MfrCatalog==p.CatalogNumber)))
                 {
                     p.IsValid = true;
-                    Product p2 = pdsOut.Find(x => (x.MfrCode == p.MfrCode) && (x.MfrCatalog == p.CatalogNumber));
+                    Product p2 = pdsOut.Find(x => (x.CEDMfrCode == p.MfrCode) && (x.MfrCatalog == p.CatalogNumber));
                     p.PreferredCatalogNumber = "MfrCatalog";
+                    p.PreferredMfrCode = "CEDMfrCode";
                     p.Merge(p2);
                 }//or the cedmfrcatalog
-                else if (pdsOut.Exists(x => (x.MfrCode == p.MfrCode) && (x.CEDMfrCatalog == p.CatalogNumber)))
+                else if (pdsOut.Exists(x => (x.CEDMfrCode == p.MfrCode) && (x.CEDMfrCatalog == p.CatalogNumber)))
                 {
                     p.IsValid = true;
-                    Product p2 = pdsOut.Find(x => (x.MfrCode == p.MfrCode) && (x.CEDMfrCatalog == p.CatalogNumber));
+                    Product p2 = pdsOut.Find(x => (x.CEDMfrCode == p.MfrCode) && (x.CEDMfrCatalog == p.CatalogNumber));
                     p.PreferredCatalogNumber = "CEDMfrCatalog";
+                    p.PreferredMfrCode = "CEDMfrCode";
                     p.Merge(p2);
                 }//or the localcatalog_key
-                else if (pdsOut.Exists(x => (x.MfrCode == p.MfrCode) && (x.LocalCatalog_Key == p.CatalogNumber)))
+                else if (pdsOut.Exists(x => (x.CEDMfrCode == p.MfrCode) && (x.LocalCatalog_Key == p.CatalogNumber)))
                 {
                     p.IsValid = true;
-                    Product p2 = pdsOut.Find(x => (x.MfrCode == p.MfrCode) && (x.LocalCatalog_Key == p.CatalogNumber));
+                    Product p2 = pdsOut.Find(x => (x.CEDMfrCode == p.MfrCode) && (x.LocalCatalog_Key == p.CatalogNumber));
                     p.PreferredCatalogNumber = "LocalCatalog_Key";
+                    p.PreferredMfrCode = "CEDMfrCode";
+                    p.Merge(p2);
+                }
+                else if (pdsOut.Exists(x => (x.LocalMfrCode_Key == p.MfrCode) && (x.MfrCatalog == p.CatalogNumber)))
+                {
+                    p.IsValid = true;
+                    Product p2 = pdsOut.Find(x => (x.LocalMfrCode_Key == p.MfrCode) && (x.MfrCatalog == p.CatalogNumber));
+                    p.PreferredCatalogNumber = "MfrCatalog";
+                    p.PreferredMfrCode = "LocalMfrCode_Key";
+                    p.Merge(p2);
+                }//or the cedmfrcatalog
+                else if (pdsOut.Exists(x => (x.LocalMfrCode_Key == p.MfrCode) && (x.CEDMfrCatalog == p.CatalogNumber)))
+                {
+                    p.IsValid = true;
+                    Product p2 = pdsOut.Find(x => (x.LocalMfrCode_Key == p.MfrCode) && (x.CEDMfrCatalog == p.CatalogNumber));
+                    p.PreferredCatalogNumber = "CEDMfrCatalog";
+                    p.PreferredMfrCode = "LocalMfrCode_Key";
+                    p.Merge(p2);
+                }//or the localcatalog_key
+                else if (pdsOut.Exists(x => (x.LocalMfrCode_Key == p.MfrCode) && (x.LocalCatalog_Key == p.CatalogNumber)))
+                {
+                    p.IsValid = true;
+                    Product p2 = pdsOut.Find(x => (x.LocalMfrCode_Key == p.MfrCode) && (x.LocalCatalog_Key == p.CatalogNumber));
+                    p.PreferredCatalogNumber = "LocalCatalog_Key";
+                    p.PreferredMfrCode = "LocalMfrCode_Key";
                     p.Merge(p2);
                 }
                 else
@@ -93,6 +120,11 @@ namespace ProductInterface
             }
             return result;
         }
+        /// <summary>
+        /// This takes the product and the output template and puts the needed fields in order
+        /// </summary>
+        /// <param name="template"></param>
+        /// <returns></returns>
         public List<List<string>> FlattenProduct(string template)
         {
 
@@ -215,6 +247,46 @@ namespace ProductInterface
                 lstFlatList.Add(flatProduct);
             }
             return lstFlatList;
+        }
+
+        public List<List<string>> FlattenProductCustom()
+        {
+            List<List<string>> lstAllProducts = new List<List<string>>();
+            List<string> header = new List<string>();
+            header.Add("StockCode");
+            header.Add("UniqueProductID_Key");
+            header.Add("CEDProductID_Key");
+            header.Add("LocalProductID_Key");
+            header.Add("MfrCode");
+            header.Add("CEDMfrCode");
+            header.Add("LocalMfrCode_Key");
+            header.Add("CatalogNubmer");
+            header.Add("MfrCatalog");
+            header.Add("CEDNfrCatalog");
+            header.Add("LocalCatalog_Key");
+            header.Add("PreferredMfrCode");
+            header.Add("PreferredCatalogNumber");
+            lstAllProducts.Add(header);
+
+            foreach (Product p in this)
+            {
+                List<string> lstProperties = new List<string>();
+                lstProperties.Add(p.StockCode);
+                lstProperties.Add(p.UniqueProductID_Key);
+                lstProperties.Add(p.CEDProductID_Key);
+                lstProperties.Add(p.LocalProductID_Key);
+                lstProperties.Add(p.MfrCode);
+                lstProperties.Add(p.CEDMfrCode);
+                lstProperties.Add(p.LocalMfrCode_Key);
+                lstProperties.Add(p.CatalogNumber);
+                lstProperties.Add(p.MfrCatalog);
+                lstProperties.Add(p.CEDMfrCatalog);
+                lstProperties.Add(p.LocalCatalog_Key);
+                lstProperties.Add(p.PreferredMfrCode);
+                lstProperties.Add(p.PreferredCatalogNumber);
+                lstAllProducts.Add(lstProperties);
+            }
+            return lstAllProducts; 
         }
     }
 }

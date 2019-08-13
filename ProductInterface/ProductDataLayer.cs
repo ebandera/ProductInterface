@@ -40,7 +40,7 @@ namespace ProductInterface
         /// <param name="acctnum"></param>
         /// <param name="lstProduct"></param>
         /// <returns></returns>
-        public string GetProductDetailsForListAsJson(string pcnum, string acctnum,Products lstProduct)
+        public string GetProductDetailsForListAsJson(string pcnum, string acctnum,Products lstProduct,int intPageSize, int intPageNumber)
         {
             HttpWebRequest httpWebRequest;
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11;
@@ -61,7 +61,7 @@ namespace ProductInterface
                         AccountNumber = acctnum,
                         LocationNumber = pcnum,
                         Query = strQuery,
-                        IncludeFacets = true,
+                        IncludeFacets = false,
                         IncludePricing = true,
                         Facets =
                         new Dictionary<string, object>()
@@ -72,8 +72,8 @@ namespace ProductInterface
                         },
                         Paging = new Dictionary<string, int>()
                     {
-                        {"PageNumber",1 },
-                        {"PageSize",lstProduct.Count }
+                        {"PageNumber",intPageNumber },
+                        {"PageSize",intPageSize }
                     }
                     });
 
@@ -111,7 +111,7 @@ namespace ProductInterface
             string result = "";
             foreach(Product p in lstProduct)
             {
-                result += "(CEDMfrCode: \"" + p.MfrCode + "\" AND (CEDMfrCatalog:\"" + p.CatalogNumber + "\" OR MfrCatalog:\"" + p.CatalogNumber + "\" OR LocalCatalog_Key:\"" + p.CatalogNumber + "\"))";
+                result += "((CEDMfrCode: \"" + p.MfrCode + "\" OR LocalMfrCode_Key: \"" + p.MfrCode + "\") AND (CEDMfrCatalog:\"" + p.CatalogNumber + "\" OR MfrCatalog:\"" + p.CatalogNumber + "\" OR LocalCatalog_Key:\"" + p.CatalogNumber + "\"))";
                 if (p != lstProduct.Last()) { result += " OR "; }
             }
             return result;
@@ -123,7 +123,9 @@ namespace ProductInterface
         /// <param name="json"></param>
         /// <returns>Products object</returns>
         public Products JsonToProductList(string json){
+            int length = json.Length;
             JavaScriptSerializer jss = new JavaScriptSerializer();
+            
             jss.MaxJsonLength = 10000000;
             dynamic item = jss.Deserialize<object>(json);
             Products lstProduct = new Products();
@@ -141,18 +143,21 @@ namespace ProductInterface
                     p = item["Products"][i]["Product"];
                     price = item["Products"][i]["Price"];
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Exception ex = new Exception("No products were retuned from the system");
-                    throw ex;
+                   // throw ex;
+                    return lstProduct;
+                    //Exception ex = new Exception("No products were retuned from the system");
+                    //throw ex;
                 }
 
 
                 Product result = new Product();
                
-                result.MfrCode = (p.ContainsKey("CEDMfrCode")) ? p["CEDMfrCode"].ToString() : "";
+                result.CEDMfrCode = (p.ContainsKey("CEDMfrCode")) ? p["CEDMfrCode"].ToString() : "";
                 result.MfrCatalog = (p.ContainsKey("MfrCatalog")) ? p["MfrCatalog"].ToString() : "";
                 result.CEDMfrCatalog = (p.ContainsKey("CEDMfrCatalog")) ? p["CEDMfrCatalog"].ToString() : "";
+                result.LocalMfrCode_Key = (p.ContainsKey("LocalMfrCode_Key")) ? p["LocalMfrCode_Key"].ToString() : "";
                 result.LocalCatalog_Key = (p.ContainsKey("LocalCatalog_Key")) ? p["LocalCatalog_Key"].ToString() : "";
                 result.FullTechDescription = (p.ContainsKey("FulltechDescription")) ? p["FulltechDescription"].ToString() : "";
                 result.MfrLongDescription = (p.ContainsKey("MfrLongDescription")) ? p["MfrLongDescription"].ToString() : "";
@@ -169,6 +174,7 @@ namespace ProductInterface
                 result.PriceSource = (price.ContainsKey("PriceSource")&&(price["PriceSource"]!=null)) ? price["PriceSource"].ToString() : "";
                 result.UniqueProductID_Key = (p.ContainsKey("UniqueProductID_Key")) ? p["UniqueProductID_Key"].ToString() : "";
                 result.CEDProductID_Key = (p.ContainsKey("CEDProductID_Key")) ? p["CEDProductID_Key"].ToString() : "";
+                result.LocalProductID_Key = (p.ContainsKey("LocalProductID_Key")) ? p["LocalProductID_Key"].ToString() : "";
                 result.CusPartNum = (p.ContainsKey("CustomerPartNumber_Key")) ? p["CustomerPartNumber_Key"].ToString() : "";
                 result.CusPartDesc = (p.ContainsKey("CustomerPartDescription")) ? p["CustomerPartDescription"].ToString() : "";
                 result.CartonQuantity = (price.ContainsKey("CartonQuantity") && price["CartonQuantity"] != null) ? price["CartonQuantity"].ToString() : "";

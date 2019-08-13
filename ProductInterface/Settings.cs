@@ -276,5 +276,11 @@ namespace ProductInterface
             Image img = Image.FromFile(savedImagePath);
             pictureBox1.Image = img;
         }
+
+        private void preloadedInputsOutputsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmPreloadedTypes pload = new frmPreloadedTypes();
+            pload.ShowDialog();
+        }
     }
 }

@@ -88,7 +88,7 @@ namespace ProductInterface
             }
           
 
-            OleDbCommand command = new OleDbCommand("Select MappingName from InputMapping where IsDeleted=false", conn);
+            OleDbCommand command = new OleDbCommand("Select MappingName from InputMapping where IsDeleted=false Order By ID", conn);
            // command.Parameters.AddWithValue("@MappingName", strName);
            
             List<string> lstMapping = new List<string>();
@@ -175,7 +175,7 @@ namespace ProductInterface
                 throw ex;
             }
 
-            OleDbCommand command = new OleDbCommand("Select OutputName from OutputFormat where IsDeleted=false", conn);
+            OleDbCommand command = new OleDbCommand("Select OutputName from OutputFormat where IsDeleted=false Order By ID", conn);
             // command.Parameters.AddWithValue("@MappingName", strName);
             
             List<string> lstOutput = new List<string>();
@@ -189,6 +189,102 @@ namespace ProductInterface
 
             conn.Close();
             return lstOutput;
+        }
+
+        public int UpdateVisibilityOfPreconfiguredInput(string strPreloadId,bool isDeleted)
+        {
+            OleDbConnection conn = new OleDbConnection(GetConnectionString());
+            string stmt = "Update InputMapping set IsDeleted=@isDeleted where PreloadId=@preloadid";
+            OleDbCommand cmd = new OleDbCommand(stmt, conn);
+            conn.Open();
+            cmd.Parameters.AddWithValue("@isDeleted", isDeleted);
+            cmd.Parameters.AddWithValue("@preloadid", strPreloadId);
+
+            int intRecordsChanged = cmd.ExecuteNonQuery();
+            conn.Close();
+            return intRecordsChanged;
+        }
+
+        public int UpdateVisibilityOfPreconfiguredOutput(string strPreloadId,bool isDeleted)
+        {
+            OleDbConnection conn = new OleDbConnection(GetConnectionString());
+            string stmt = "Update OutputFormat set IsDeleted=@isDeleted where PreloadId=@preloadid";
+            OleDbCommand cmd = new OleDbCommand(stmt, conn);
+            conn.Open();
+            cmd.Parameters.AddWithValue("@isDeleted", isDeleted);
+            cmd.Parameters.AddWithValue("@preloadid", strPreloadId);
+
+            int intRecordsChanged = cmd.ExecuteNonQuery();
+            conn.Close();
+            return intRecordsChanged;
+        }
+
+        public Dictionary<string,bool> SelectPreconfiguredInputs()
+        {
+            System.Data.OleDb.OleDbConnection conn = new OleDbConnection(GetConnectionString());
+            try
+            {
+                conn.Open();
+
+            }
+            catch
+            {
+                Exception ex = new Exception("There was an error opening the database.  Most likely this is caused by the issue: \n 'microsoft.ace.oledb.12.0' provider is not registered on the local machine' \n Make sure that it is installed.  Use the following dialog if needed.");
+                throw ex;
+            }
+
+            OleDbCommand command = new OleDbCommand("Select PreloadId,IsDeleted from InputMapping where IsPreload=true", conn);
+            // command.Parameters.AddWithValue("@MappingName", strName);
+
+            Dictionary<string, bool> output = new Dictionary<string, bool>();
+           // List<string> lstOutput = new List<string>();
+            using (OleDbDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read() == true)
+                {
+                    int i = reader.GetOrdinal("IsDeleted");
+                    output.Add(reader["PreloadId"].ToString(), reader.GetBoolean(i));
+                  
+                   
+                }
+            }
+
+            conn.Close();
+            return output;
+        }
+
+        public Dictionary<string, bool> SelectPreconfiguredOutputs()
+        {
+            System.Data.OleDb.OleDbConnection conn = new OleDbConnection(GetConnectionString());
+            try
+            {
+                conn.Open();
+
+            }
+            catch
+            {
+                Exception ex = new Exception("There was an error opening the database.  Most likely this is caused by the issue: \n 'microsoft.ace.oledb.12.0' provider is not registered on the local machine' \n Make sure that it is installed.  Use the following dialog if needed.");
+                throw ex;
+            }
+
+            OleDbCommand command = new OleDbCommand("Select PreloadId,IsDeleted from OutputFormat where IsPreload=true", conn);
+            // command.Parameters.AddWithValue("@MappingName", strName);
+
+            Dictionary<string, bool> output = new Dictionary<string, bool>();
+            // List<string> lstOutput = new List<string>();
+            using (OleDbDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read() == true)
+                {
+                    int i = reader.GetOrdinal("IsDeleted");
+                    output.Add(reader["PreloadId"].ToString(), reader.GetBoolean(i));
+
+
+                }
+            }
+
+            conn.Close();
+            return output;
         }
     }
 }

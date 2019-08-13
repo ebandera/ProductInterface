@@ -23,7 +23,9 @@ namespace ProductInterface
         private string _strThumbnailUrl = "";
         private string _strUnspsc = "";
         private string _strUpc = "";
+        private string _strCEDMfrCode = "";
         private string _strMfrCode = "";
+        private string _strLocalMfrCode_Key = "";
         private string _strCatalogNumber = "";
         private string _strCedMfrCatalog = "";
         private string _strLocalCatalog_Key = "";
@@ -52,6 +54,8 @@ namespace ProductInterface
         private string _strQuantityOnHand = "";
         private bool _blnIsValid = false;
         private string _strPreferredCatalogNumber = "MfrCatalog";
+        private string _strPreferredMfrCode = "CEDMfrCode";
+        private string _strLocalProductID_Key = "";
         private static List<string> lstOverrideEntities = new List<string>();
         public static void ConfigureOverrides(ColumnMap map)
         {
@@ -70,9 +74,11 @@ namespace ProductInterface
         private string tempThumbnailUrl;
         private string tempUnspsc;
         private string tempUpc;
+        private string tempCEDMfrCode;
         private string tempMfrCode;
         private string tempCatalogNumber;
         private string tempMfrCatalog;
+        private string tempLocalMfrCode_Key;
         private string tempCedMfrCatalog;
         private string tempLocalCatalog_Key;
         private string tempSpecificationSheet;
@@ -111,9 +117,11 @@ namespace ProductInterface
             tempThumbnailUrl = ThumbnailUrl;
             tempUnspsc = Unspsc;
             tempUpc = Upc;
-            tempMfrCode = MfrCode;
+            tempCEDMfrCode = CEDMfrCode;
+            tempLocalMfrCode_Key = LocalMfrCode_Key;
             tempCatalogNumber = CatalogNumber;
             tempMfrCatalog = MfrCatalog;
+            tempLocalMfrCode_Key = LocalMfrCode_Key;
             tempCedMfrCatalog = CEDMfrCatalog;
             tempLocalCatalog_Key = LocalCatalog_Key;
             tempSpecificationSheet = SpecificationSheet;
@@ -152,9 +160,11 @@ namespace ProductInterface
             this.ThumbnailUrl = p.ThumbnailUrl;
             this.Unspsc = p.Unspsc;
             this.Upc = p.Upc;
-            // this.MfrCode = p.MfrCode;
+            this.CEDMfrCode = p.CEDMfrCode;
+            this.LocalMfrCode_Key = p.LocalMfrCode_Key;
             this.CatalogNumber =p.CatalogNumber;
             this.MfrCatalog = p.MfrCatalog;
+            this.LocalMfrCode_Key = p.LocalMfrCode_Key;
             this.CEDMfrCatalog = p.CEDMfrCatalog;
             this.LocalCatalog_Key = p.LocalCatalog_Key;
             this.SpecificationSheet = p.SpecificationSheet;
@@ -242,8 +252,18 @@ namespace ProductInterface
         }
         public string MfrCode
         {
-            get { return _strMfrCode; }
-            set { _strMfrCode = value; }
+            get { return GetValueByPropertyName(PreferredMfrCode); }
+            set { SetValueByPropertyName(PreferredMfrCode, value); }
+        }
+        public string CEDMfrCode
+        {
+            get { return _strCEDMfrCode; }
+            set { _strCEDMfrCode = value; }
+        }
+        public string LocalMfrCode_Key
+        {
+            get { return _strLocalMfrCode_Key; }
+            set { _strLocalMfrCode_Key= value; }
         }
         public string CatalogNumber
         {
@@ -296,6 +316,11 @@ namespace ProductInterface
         {
             get { return _strUniqueProductID_Key; }
             set { _strUniqueProductID_Key = value; }
+        }
+        public string LocalProductID_Key
+        {
+            get { return _strLocalProductID_Key; }
+            set { _strLocalProductID_Key = value; }
         }
         public string Min
         {
@@ -399,6 +424,11 @@ namespace ProductInterface
             get { return _strPreferredCatalogNumber;}
             set { _strPreferredCatalogNumber = value; }
         }
+        public string PreferredMfrCode
+        {
+            get { return _strPreferredMfrCode; }
+            set { _strPreferredMfrCode = value; }
+        }
 
 
 
@@ -430,7 +460,7 @@ namespace ProductInterface
                 case "ImageUrl":
                     this.ImageUrl = value;
                     break;
-                case "Thumbnailurl":
+                case "ThumbnailUrl":
                     this.ThumbnailUrl = value;
                     break;
                 case "Unspsc":
@@ -447,6 +477,12 @@ namespace ProductInterface
                     break;
                 case "MfrCatalog":
                     this.MfrCatalog = value;
+                    break;
+                case "LocalMfrCode_Key":
+                    this.LocalMfrCode_Key = value;
+                    break;
+                case "CEDMfrCode":
+                    this.CEDMfrCode = value;
                     break;
                 case "CEDMfrCatalog":
                     this.CEDMfrCatalog = value;
@@ -558,6 +594,10 @@ namespace ProductInterface
                     return this.Upc;
                 case "MfrCode":
                     return this.MfrCode;
+                case "CEDMfrCode":
+                    return this.CEDMfrCode;
+                case "LocalMfrCode_Key":
+                    return this.LocalMfrCode_Key;
                 case "CatalogNumber":
                     return this.CatalogNumber;
                 case "MfrCatalog":
@@ -636,7 +676,7 @@ namespace ProductInterface
                     return this.tempStockCode;
                 case "ImageUrl":
                     return this.tempImageUrl;
-                case "Thumbnailurl":
+                case "ThumbnailUrl":
                     return this.tempThumbnailUrl;
                 case "Unspsc":
                     return this.tempUnspsc;
@@ -644,6 +684,10 @@ namespace ProductInterface
                     return this.tempUpc;
                 case "MfrCode":
                     return this.tempMfrCode;
+                case "CEDMfrCode":
+                    return this.tempCEDMfrCode;
+                case "LocalMfrCode_Key":
+                    return this.tempLocalMfrCode_Key;
                 case "CatalogNumber":
                     return this.tempCatalogNumber;
                 case "MfrCatalog":

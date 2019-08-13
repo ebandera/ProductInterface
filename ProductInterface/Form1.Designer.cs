@@ -41,6 +41,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnDelInput = new System.Windows.Forms.Button();
             this.btnDelOutput = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -172,12 +173,20 @@
             this.btnDelOutput.UseVisualStyleBackColor = false;
             this.btnDelOutput.Click += new System.EventHandler(this.btnDelOutput_Click);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(21, 184);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(346, 23);
+            this.progressBar1.TabIndex = 35;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(379, 195);
+            this.ClientSize = new System.Drawing.Size(379, 213);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.btnDelOutput);
             this.Controls.Add(this.btnDelInput);
             this.Controls.Add(this.label2);
@@ -213,6 +222,7 @@
         private System.Windows.Forms.Button btnDelOutput;
         private System.Windows.Forms.ToolStripMenuItem settingsAndConfigToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem productManualToolStripMenuItem;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductInterface", "ProductInterface\ProductInterface.csproj", "{E0F6A943-B104-4C34-A570-95CBED848058}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabelPrintInterface", "..\LabelPrint\LabelPrint\LabelPrintInterface\LabelPrintInterface.csproj", "{9890A2DE-7D56-4CD2-8397-2F90B841E5FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabelPrintInterface", "..\LabelPrintInterface\LabelPrintInterface\LabelPrintInterface.csproj", "{9890A2DE-7D56-4CD2-8397-2F90B841E5FB}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{C4C7666D-E55F-4EA5-939E-08CD5DB9C705}"
 EndProject

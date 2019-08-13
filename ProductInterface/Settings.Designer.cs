@@ -48,6 +48,7 @@
             this.lblValAcct = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.productManualContainsAdditionalInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.preloadedInputsOutputsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblLogo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numOffsetX)).BeginInit();
@@ -242,6 +243,7 @@
             // 
             this.menuStrip1.BackColor = System.Drawing.Color.DarkBlue;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.preloadedInputsOutputsToolStripMenuItem,
             this.productManualContainsAdditionalInformationToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -257,6 +259,15 @@
             this.productManualContainsAdditionalInformationToolStripMenuItem.Size = new System.Drawing.Size(106, 20);
             this.productManualContainsAdditionalInformationToolStripMenuItem.Text = "Product Manual";
             this.productManualContainsAdditionalInformationToolStripMenuItem.Click += new System.EventHandler(this.productManualContainsAdditionalInformationToolStripMenuItem_Click);
+            // 
+            // preloadedInputsOutputsToolStripMenuItem
+            // 
+            this.preloadedInputsOutputsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.preloadedInputsOutputsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.preloadedInputsOutputsToolStripMenuItem.Name = "preloadedInputsOutputsToolStripMenuItem";
+            this.preloadedInputsOutputsToolStripMenuItem.Size = new System.Drawing.Size(163, 20);
+            this.preloadedInputsOutputsToolStripMenuItem.Text = "Preloaded Inputs/Outputs";
+            this.preloadedInputsOutputsToolStripMenuItem.Click += new System.EventHandler(this.preloadedInputsOutputsToolStripMenuItem_Click);
             // 
             // pictureBox1
             // 
@@ -341,5 +352,6 @@
         private System.Windows.Forms.ToolStripMenuItem productManualContainsAdditionalInformationToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label lblLogo;
+        private System.Windows.Forms.ToolStripMenuItem preloadedInputsOutputsToolStripMenuItem;
     }
 }

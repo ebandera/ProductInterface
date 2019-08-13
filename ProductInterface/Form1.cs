@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using LabelPrintInterface;
 using System.Diagnostics;
+using System.Drawing.Printing;
 
 
 namespace ProductInterface
@@ -33,6 +34,9 @@ namespace ProductInterface
 
             try
             {
+                progressBar1.Maximum = 5;
+                progressBar1.Step = 1;
+                progressBar1.PerformStep();
                 RegReader rr = new RegReader(@"Software\CED\CEDLabelPrint");
                 if(!rr.Test("PCNum")||!rr.Test("AcctNum"))
                 {
@@ -95,7 +99,7 @@ namespace ProductInterface
                     lstSheet = r.ReadTheSheet(strFilePath, ",");
                 }
 
-
+                progressBar1.PerformStep();
 
                 // List<List<string>> lstSheet = r.ReadTheSheet(strFilePath);
                 //validate sheet and turn into Products Object
@@ -119,13 +123,27 @@ namespace ProductInterface
                 {
                     //send the list of products to the API getting back json
                     ProductDataLayer data = new ProductDataLayer();
-                    string results = data.GetProductDetailsForListAsJson(rr.Read("PCNum"), rr.Read("AcctNum"), ps);
-                    //put the results into it's own list of products
-                    Products lstAPIResult = data.JsonToProductList(results);
-                    //Merge the lists - essentially providing API data to the initial list map is required to determine overrides
+                    int tempCount = 0;
+                    int pageCount = 1;
+                    Products lstAPIResult = new Products();
+                    do
+                    {
+                        string results = data.GetProductDetailsForListAsJson(rr.Read("PCNum"), rr.Read("AcctNum"), ps,100,pageCount);
+                        //put the results into it's own list of products
+                        Products tempAPIResult = data.JsonToProductList(results);
+                        //counts how many products in this set
+                        tempCount = tempAPIResult.Count;
+                        //adds them to the main list
+                        lstAPIResult.AddRange(tempAPIResult);
+                        //Merge the lists - essentially providing API data to the initial list map is required to determine overrides
+                       
+                        pageCount++;
+                        
+                    } while (tempCount > 0); //this does run requests until a 0 product return happens
+                    //then merges the existing products with the list
                     ps.Merge(lstAPIResult, maps.GetActiveMap());
                 }
-               
+                progressBar1.PerformStep();         
 
                 Products pdsToPrint;
                 if (rrRequireAddlData == true)
@@ -139,6 +157,7 @@ namespace ProductInterface
                     pdsToPrint = ps;
 
                 }
+                progressBar1.PerformStep();
                 string outboundTemplate = dataLayer.GetOutputByName(cboOutput.SelectedItem.ToString());
                 outboundTemplate = TemplateItem.ReplaceXMLLogoTemplateValue(outboundTemplate, rr.Read("logo","Images\\ced_web.jpg"));
                 
@@ -146,8 +165,25 @@ namespace ProductInterface
                 {
                     rr.Add("InputFormat", cboMappings.SelectedItem.ToString());
                     rr.Add("OutputFormat", cboOutput.SelectedItem.ToString());
-                    LabelPrint lp = new LabelPrint(outboundTemplate, pdsToPrint.FlattenProduct(outboundTemplate),rrOffsetX,rrOffsetY);
-                    lp.Print(true);
+                    string printerName;
+                    LabelPrint lp = new LabelPrint(outboundTemplate, pdsToPrint.FlattenProduct(outboundTemplate), rrOffsetX, rrOffsetY);
+                    if (!rr.Test("PrinterName"))
+                    {
+                        printerName = lp.Print(true);
+                    }
+                    else
+                    {
+                        printerName= rr.Read("PrinterName");
+                        PrintDocument pd = lp.GetPrintDocument(printerName);
+                        printerName = lp.Print(true, pd);
+                    }
+                    rr.Add("PrinterName", printerName);
+
+
+
+                    progressBar1.PerformStep();
+                    MessageBox.Show("Done");
+                    progressBar1.Value = 0;
                 }
                 catch
                 {
@@ -159,6 +195,7 @@ namespace ProductInterface
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                progressBar1.Value = 0;
             }
         }
 
@@ -367,6 +404,135 @@ namespace ProductInterface
                  }
             }
             return strResultingFileType;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+
+            try
+            {
+                progressBar1.Maximum = 5;
+                progressBar1.Step = 1;
+                progressBar1.PerformStep();
+                RegReader rr = new RegReader(@"Software\CED\CEDLabelPrint");
+                if (!rr.Test("PCNum") || !rr.Test("AcctNum"))
+                {
+                    MessageBox.Show("Looks like you haven't configured your PC and Account yet.  The account is required to determine customer specific information like customer part numbers or pricing.  If you won't need that, then just fill in the COD account and that will work fine.");
+                    Settings s = new Settings();
+                    s.ShowDialog();
+                }
+                string rrPCNum = rr.Read("PCNum");
+                string rrAcctNum = rr.Read("AcctNum");
+                int rrOffsetX = 0;
+                Int32.TryParse(rr.Read("OffsetX", "0"), out rrOffsetX);
+                int rrOffsetY = 0;
+                Int32.TryParse(rr.Read("OffsetY", "0"), out rrOffsetY);
+                bool rrRetrieveAddlData = true;
+                Boolean.TryParse(rr.Read("RetrieveAddlData", "True"), out rrRetrieveAddlData);
+                bool rrRequireAddlData = false;
+                Boolean.TryParse(rr.Read("RequireAddlData", "False"), out rrRequireAddlData);
+
+
+
+
+                //read the sheet to a list
+                //====================================================================
+
+                DAL dataLayer = new ProductInterface.DAL();
+                ColumnMaps maps = new ColumnMaps();
+                maps.LoadXMLFromString(dataLayer.GetMapsByName(cboMappings.SelectedItem.ToString()));
+                string fileType = GetFileTypeFromExtensionAndTemplate(Path.GetExtension(strFilePath), maps);
+                List<List<string>> lstSheet = new List<List<string>>();
+
+                if (fileType == "xL")
+                {
+                    ExcelReader r = new ExcelReader();
+                    lstSheet = r.ReadTheSheetXlsx(strFilePath);
+                }
+                else if (fileType == "csv")
+                {
+                    TextReader r = new TextReader();
+                    lstSheet = r.ReadTheSheet(strFilePath, ",");
+                }
+                else if (fileType == "tabDelimited")
+                {
+                    TextReader r = new ProductInterface.TextReader();
+                    lstSheet = r.ReadTheSheet(strFilePath, "\t");
+                }
+                else if (fileType == "legacyXL")
+                {
+                    LegacyExcelReader r = new LegacyExcelReader();
+                    lstSheet = r.ReadTheSheetXls(strFilePath);
+                }
+                else if (fileType == "fixedWidth")
+                {
+                    TextReader r = new TextReader();
+                    lstSheet = r.ReadFixedWidth(strFilePath, maps.maps[0].fixedWidth);//this second variable reads the column layout from the xml
+
+                }
+                else
+                {
+                    TextReader r = new TextReader();
+                    lstSheet = r.ReadTheSheet(strFilePath, ",");
+                }
+
+
+
+                // List<List<string>> lstSheet = r.ReadTheSheet(strFilePath);
+                //validate sheet and turn into Products Object
+                Products ps = new Products();
+
+
+
+
+                //develop logic to determine file type
+
+                if (maps.ValidateSheet(lstSheet))//when validating the sheet also, the active map is determined
+                {
+                    ps = ps.LoadSheet(lstSheet, maps.GetActiveMap());
+                }
+                else
+                {
+                    Exception ex = new Exception("Invalid Input Mapping.  Likely headers in the data file don't match the mapping file.");
+                    throw ex;
+                }
+                if (rrRetrieveAddlData == true)
+                {
+                    //send the list of products to the API getting back json
+                    ProductDataLayer data = new ProductDataLayer();
+                    int tempCount = 0;
+                    int pageCount = 1;
+                    Products lstAPIResult = new Products();
+                    do
+                    {
+                        string results = data.GetProductDetailsForListAsJson(rr.Read("PCNum"), rr.Read("AcctNum"), ps, 100, pageCount);
+                        //put the results into it's own list of products
+                        Products tempAPIResult = data.JsonToProductList(results);
+                        //counts how many products in this set
+                        tempCount = tempAPIResult.Count;
+                        //adds them to the main list
+                        lstAPIResult.AddRange(tempAPIResult);
+                        //Merge the lists - essentially providing API data to the initial list map is required to determine overrides
+
+                        pageCount++;
+
+                    } while (tempCount > 0); //this does run requests until a 0 product return happens
+                                             //then merges the existing products with the list
+                                             //ps.Merge(lstAPIResult, maps.GetActiveMap());
+                    TextReader tr = new TextReader();
+                    tr.WriteProducts(ps.FlattenProductCustom(), ",");
+                }
+
+
+               
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
     }
 }
