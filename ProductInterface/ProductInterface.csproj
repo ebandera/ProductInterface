@@ -52,11 +52,11 @@
     <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Gma.QrCodeNet.Encoding, Version=0.4.0.0, Culture=neutral, PublicKeyToken=e8a75d24b142be49, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Gma.QrCodeNet.Encoding.dll</HintPath>
+      <HintPath>..\..\LabelPrintInterface\LabelPrintInterface\bin\Debug\Gma.QrCodeNet.Encoding.dll</HintPath>
     </Reference>
     <Reference Include="LabelPrintInterface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\LabelPrint\LabelPrint\LabelPrintInterface\bin\Debug\LabelPrintInterface.dll</HintPath>
+      <HintPath>..\..\LabelPrintInterface\LabelPrintInterface\bin\Debug\LabelPrintInterface.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
