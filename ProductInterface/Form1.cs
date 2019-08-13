@@ -31,7 +31,7 @@ namespace ProductInterface
         string strOutputPath = "";
         private void button1_Click(object sender, EventArgs e)
         {
-
+            //test comment
             try
             {
                 progressBar1.Maximum = 5;
